@@ -49,6 +49,7 @@ async fn window() {
 
     const COLS: usize = 32;
     const ROWS: usize = 10;
+    const ROW_COLORS: [Color; ROWS] = [RED, ORANGE, YELLOW, GOLD, GREEN, BLUE, PURPLE, MAGENTA, PINK, GRAY];
 
     let mut bricks: Vec<Entity> = vec![brick; ROWS * COLS];
 
@@ -56,6 +57,7 @@ async fn window() {
         for x in 0..COLS {
             bricks[x + y * COLS].x += x as f32 * 25.0;
             bricks[x + y * COLS].y += y as f32 * 15.0;
+            bricks[x + y * COLS].color = ROW_COLORS[y];
         }
     }
 
@@ -101,5 +103,12 @@ fn player_movement(player: &mut Entity) {
     }
     if is_key_down(KeyCode::Left) {
         player.x -= player_speed * dt;
+    }
+
+    if player.x > VIRTUAL_WIDTH {
+        player.x += -VIRTUAL_WIDTH - player.w; 
+    }
+    if player.x + player.w <= 0.0 {
+        player.x += VIRTUAL_WIDTH + player.w;
     }
 }
