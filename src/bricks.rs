@@ -1,4 +1,4 @@
-use crate::entity::Entity;
+use crate::{ball::Ball, entity::Entity};
 use macroquad::prelude::*;
 // use crate::{VIRTUAL_WIDTH, VIRTUAL_HEIGHT};
 
@@ -36,8 +36,20 @@ pub fn init_grid() -> Vec<Entity> {
     bricks
 }
 
-pub fn make_bricks(bricks: &Vec<Entity>) {
-    for brick in bricks {
+fn ball_to_brick(bricks: &mut Vec<Entity>, ball: &mut Ball) {
+    bricks.retain(|brick| {
+        if ball.entity.intersects(brick) {
+            ball.velocity_y = -ball.velocity_y;
+            false
+        } else {
+            true
+        }
+    });
+}
+
+pub fn make_bricks(bricks: &mut Vec<Entity>, ball: &mut Ball) {
+    for brick in bricks.iter() {
         brick.draw();
     }
+    ball_to_brick(bricks, ball);
 }
