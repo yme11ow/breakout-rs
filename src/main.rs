@@ -1,6 +1,7 @@
 mod entity;
 mod player;
 mod bricks;
+mod ball;
 use macroquad::miniquad::conf::Platform;
 use macroquad::prelude::*;
 
@@ -12,7 +13,7 @@ fn window_conf() -> Conf {
     Conf {
         window_title: "Breakout: Rust Edition".to_owned(),
         platform: Platform {
-            swap_interval: Some(0), // 1 = vsync on
+            swap_interval: Some(1), // 1 = vsync on, 0 = vsync off
             ..Default::default()
         },
         ..Default::default()
@@ -27,6 +28,7 @@ async fn main() {
 async fn window() {
     let mut player = player::spawn();
     let mut bricks = bricks::init_grid();
+    let mut ball = ball::spawn();
 
     loop {
         clear_background(BLACK);
@@ -38,6 +40,7 @@ async fn window() {
         )));
         player::make_player(&mut player);
         bricks::make_bricks(&bricks);
+        ball::make_ball(&mut ball);
         set_default_camera();
         draw_text(
             format!("FPS: {} dt: {:.2}ms", get_fps(), get_frame_time() * 1000.0),
@@ -49,4 +52,3 @@ async fn window() {
         next_frame().await
     }
 }
-

@@ -9,8 +9,12 @@ pub struct Entity {
     pub color: Color,
 }
 
-impl Entity {
+impl Entity{
     pub fn draw(&self) {
         draw_rectangle(self.x, self.y, self.w, self.h, self.color);
+    }
+
+    pub fn draw_circle(&self, r: f32) {
+        draw_poly(self.x, self.y, 255, r,0., self.color);
     }
 }
