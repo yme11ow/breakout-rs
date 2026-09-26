@@ -4,7 +4,6 @@ mod bricks;
 mod ball;
 use macroquad::miniquad::conf::Platform;
 use macroquad::prelude::*;
-
 use crate::ball::Ball;
 
 // Important Variables
@@ -31,8 +30,13 @@ async fn window() {
     let mut player = player::spawn();
     let mut bricks = bricks::init_grid();
     let mut ball = Ball::spawn();
+    
 
     loop {
+        // update
+        ball.update(&player);
+
+        //draw
         clear_background(BLACK);
         set_camera(&Camera2D::from_display_rect(Rect::new(
             0.0,
@@ -42,7 +46,7 @@ async fn window() {
         )));
         player::make_player(&mut player);
         bricks::make_bricks(&mut bricks, &mut ball);
-        ball::make_ball(&mut ball, &mut player);
+        ball.draw();
         set_default_camera();
         draw_text(
             format!("FPS: {} dt: {:.2}ms", get_fps(), get_frame_time() * 1000.0),

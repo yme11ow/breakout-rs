@@ -22,51 +22,52 @@ impl Ball{
             velocity_y: 5.0,
         }
     }
-}
 
+    pub fn update(&mut self, player: &Entity) {
+        let random_bool: bool = rand::random();
 
-fn movement(ball: &mut Ball, player: & mut Entity) {
-    let random_bool: bool = rand::random();
+        if self.entity.y > VIRTUAL_HEIGHT - self.entity.h {
+            self.entity.x = 400.0;
+            self.entity.y = 300.0;
 
-    if ball.entity.y > VIRTUAL_HEIGHT - ball.entity.h {
-        ball.entity.x = 400.0;
-        ball.entity.y = 300.0;
-
-        if random_bool {
-            ball.velocity_x = -5.0;
-        } else {
-            ball.velocity_x = 5.0;
+            if random_bool {
+                self.velocity_x = -5.0;
+            } else {
+                self.velocity_x = 5.0;
+            }
+            self.velocity_y = 5.0;
         }
-        ball.velocity_y = 5.0;
-        // lives - 1?
+
+        self.ball_to_player(player);
+
+        if self.entity.x < 0.0 {
+            self.velocity_x = self.velocity_x.abs();
+        } else if self.entity.x > VIRTUAL_WIDTH - self.entity.w {
+            self.velocity_x = -self.velocity_x.abs();
+        }
+        
+        if self.entity.y < 0.0 {
+            self.velocity_y = -self.velocity_y;
+        }
+
+        self.entity.y += self.velocity_y;
+        self.entity.x += self.velocity_x;
+
     }
 
-    if ball.entity.x < 0.0 {
-        ball.velocity_x = ball.velocity_x.abs();
-    } else if ball.entity.x > VIRTUAL_WIDTH - ball.entity.w {
-        ball.velocity_x = -ball.velocity_x.abs();
-    }
-    
-    if ball.entity.y < 0.0 {
-        ball.velocity_y = -ball.velocity_y;
-    }
+    fn ball_to_player(&mut self, player: &Entity) {
+        if self.entity.intersects(player) {
+            let ball_center = self.entity.x + self.entity.w / 2.0;
+            let player_center = player.x + player.w / 2.0;
+            let hit_pos = (ball_center - player_center) / (player.w / 2.0);
+            let speed = (self.velocity_x * self.velocity_x + self.velocity_y * self.velocity_y).sqrt();
 
-    if ball.entity.intersects(player) {
-        let ball_center = ball.entity.x + ball.entity.w / 2.0;
-        let player_center = player.x + player.w / 2.0;
-        let hit_pos = (ball_center - player_center) / (player.w / 2.0);
-        let speed = (ball.velocity_x * ball.velocity_x + ball.velocity_y * ball.velocity_y).sqrt();
-
-        ball.velocity_x = hit_pos * speed;
-        ball.velocity_y = -ball.velocity_y;
+            self.velocity_x = hit_pos * speed;
+            self.velocity_y = -self.velocity_y;
+        }
     }
 
-    ball.entity.y += ball.velocity_y;
-    ball.entity.x += ball.velocity_x;
-
-}
-
-pub fn make_ball(ball: &mut Ball, player:&mut Entity) {
-    ball.entity.draw_circle(7.5);
-    movement(ball, player);
+    pub fn draw(&self) {
+        self.entity.draw_circle(7.5);
+    }
 }

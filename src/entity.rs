@@ -15,7 +15,7 @@ impl Entity{
     }
 
     pub fn draw_circle(&self, r: f32) {
-        draw_poly(self.x, self.y, 255, r,0., self.color);
+        draw_poly(self.x + self.w / 2.0, self.y + self.h / 2.0, 255, r,0., self.color);
     }
 
     pub fn intersects(&self, other: &Entity) -> bool {
