@@ -1,6 +1,6 @@
 use crate::entity::Entity;
+use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH};
 use macroquad::prelude::*;
-use crate::{VIRTUAL_WIDTH, VIRTUAL_HEIGHT};
 
 pub struct Player {
     pub entity: Entity,
@@ -9,13 +9,13 @@ pub struct Player {
 impl Player {
     pub fn spawn() -> Self {
         Player {
-            entity: Entity { 
+            entity: Entity {
                 x: VIRTUAL_WIDTH / 2.0 - 60.0,
                 y: VIRTUAL_HEIGHT - 40.0,
                 w: 100.0,
                 h: 10.0,
                 color: WHITE,
-            }
+            },
         }
     }
 
