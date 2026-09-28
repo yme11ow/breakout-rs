@@ -2,37 +2,43 @@ use crate::entity::Entity;
 use macroquad::prelude::*;
 use crate::{VIRTUAL_WIDTH, VIRTUAL_HEIGHT};
 
-pub fn spawn() -> Entity {
-    Entity {
-        x: VIRTUAL_WIDTH / 2.0 - 60.0,
-        y: VIRTUAL_HEIGHT - 40.0,
-        w: 100.0,
-        h: 10.0,
-        color: WHITE,
-    }
+pub struct Player {
+    pub entity: Entity,
 }
 
-fn movement(player: &mut Entity) {
-    let player_speed = 400.0;
-    let dt = get_frame_time();
+impl Player {
+    pub fn spawn() -> Self {
+        Player {
+            entity: Entity { 
+                x: VIRTUAL_WIDTH / 2.0 - 60.0,
+                y: VIRTUAL_HEIGHT - 40.0,
+                w: 100.0,
+                h: 10.0,
+                color: WHITE,
+            }
+        }
+    }
 
-    if is_key_down(KeyCode::Right) {
-        player.x += player_speed * dt;
-    }
-    if is_key_down(KeyCode::Left) {
-        player.x -= player_speed * dt;
+    pub fn update(&mut self) {
+        let player_speed = 400.0;
+        let dt = get_frame_time();
+
+        if is_key_down(KeyCode::Right) {
+            self.entity.x += player_speed * dt;
+        }
+        if is_key_down(KeyCode::Left) {
+            self.entity.x -= player_speed * dt;
+        }
+
+        if self.entity.x > VIRTUAL_WIDTH {
+            self.entity.x += -VIRTUAL_WIDTH - self.entity.w;
+        }
+        if self.entity.x + self.entity.w <= 0.0 {
+            self.entity.x += VIRTUAL_WIDTH + self.entity.w;
+        }
     }
 
-    if player.x > VIRTUAL_WIDTH {
-        player.x += -VIRTUAL_WIDTH - player.w;
-    }
-    if player.x + player.w <= 0.0 {
-        player.x += VIRTUAL_WIDTH + player.w;
+    pub fn draw(&self) {
+        self.entity.draw();
     }
 }
-
-pub fn make_player(player: &mut Entity) {
-    player.draw();
-    movement(player);
-}
-

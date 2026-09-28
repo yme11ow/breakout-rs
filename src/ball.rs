@@ -38,7 +38,7 @@ impl Ball{
             self.velocity_y = 5.0;
         }
 
-        self.ball_to_player(player);
+        self.ball_to_player(player); //check collision with oaddle
 
         if self.entity.x < 0.0 {
             self.velocity_x = self.velocity_x.abs();

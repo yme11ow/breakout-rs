@@ -5,6 +5,7 @@ mod ball;
 use macroquad::miniquad::conf::Platform;
 use macroquad::prelude::*;
 use crate::ball::Ball;
+use crate::player::Player;
 
 // Important Variables
 pub const VIRTUAL_WIDTH: f32 = 800.0;
@@ -27,14 +28,15 @@ async fn main() {
 }
 
 async fn window() {
-    let mut player = player::spawn();
+    let mut player = Player::spawn();
     let mut bricks = bricks::init_grid();
     let mut ball = Ball::spawn();
     
 
     loop {
         // update
-        ball.update(&player);
+        ball.update(&player.entity);
+        player.update();
 
         //draw
         clear_background(BLACK);
@@ -44,7 +46,7 @@ async fn window() {
             VIRTUAL_WIDTH,
             -VIRTUAL_HEIGHT,
         )));
-        player::make_player(&mut player);
+        player.draw();
         bricks::make_bricks(&mut bricks, &mut ball);
         ball.draw();
         set_default_camera();
