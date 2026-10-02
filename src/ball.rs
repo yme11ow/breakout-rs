@@ -1,6 +1,6 @@
 use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, entity::Entity};
 use macroquad::color::WHITE;
-use rand::{self};
+use ::rand;
 
 pub struct Ball {
     pub entity: Entity,
@@ -26,7 +26,7 @@ impl Ball {
     pub fn update(&mut self, player: &Entity) {
         let random_bool: bool = rand::random();
 
-        if self.entity.y > VIRTUAL_HEIGHT - self.entity.h {
+        if self.missed_paddle() {
             self.entity.x = 400.0;
             self.entity.y = 300.0;
 
@@ -38,7 +38,7 @@ impl Ball {
             self.velocity_y = 5.0;
         }
 
-        self.ball_to_player(player); //check collision with oaddle
+        self.ball_to_player(player); //check collision with paddle
 
         if self.entity.x < 0.0 {
             self.velocity_x = self.velocity_x.abs();
@@ -65,6 +65,15 @@ impl Ball {
             self.velocity_x = hit_pos * speed;
             self.velocity_y = -self.velocity_y;
         }
+    }
+
+    pub fn missed_paddle(&self) -> bool {
+        if self.entity.y > VIRTUAL_HEIGHT - self.entity.h {
+            true
+        } else {
+            false
+        }
+
     }
 
     pub fn draw(&self) {

@@ -1,10 +1,9 @@
 mod ball;
 mod bricks;
 mod entity;
+mod game_state;
 mod player;
-use crate::ball::Ball;
-use crate::bricks::Bricks;
-use crate::player::Player;
+use crate::game_state::GameState;
 use macroquad::miniquad::conf::Platform;
 use macroquad::prelude::*;
 
@@ -16,7 +15,7 @@ fn window_conf() -> Conf {
     Conf {
         window_title: "Breakout: Rust Edition".to_owned(),
         platform: Platform {
-            swap_interval: Some(1), // 1 = vsync on, 0 = vsync off
+            swap_interval: Some(1), // 1 = vsync on, 0 = vsync off (note vsync off is buggy due to ball physics not using dt)
             ..Default::default()
         },
         ..Default::default()
@@ -29,35 +28,14 @@ async fn main() {
 }
 
 async fn window() {
-    let mut player = Player::spawn();
-    let mut bricks = Bricks::spawn();
-    let mut ball = Ball::spawn();
+    let mut game_state = GameState::init();
 
     loop {
         // update
-        player.update();
-        bricks.update(&mut ball);
-        ball.update(&player.entity);
+        game_state.update();
 
         //draw
-        clear_background(BLACK);
-        set_camera(&Camera2D::from_display_rect(Rect::new(
-            0.0,
-            VIRTUAL_HEIGHT,
-            VIRTUAL_WIDTH,
-            -VIRTUAL_HEIGHT,
-        )));
-        player.draw();
-        bricks.draw();
-        ball.draw();
-        set_default_camera();
-        draw_text(
-            format!("FPS: {} dt: {:.2}ms", get_fps(), get_frame_time() * 1000.0),
-            10.0,
-            20.0,
-            30.0,
-            GREEN,
-        );
+        game_state.draw();
         next_frame().await
     }
 }
