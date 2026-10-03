@@ -41,26 +41,54 @@ impl GameState {
                 self.ball.update(&self.player.entity);
                 self.lives();
             },
-            2 => println!("GAME OVER"),
+            2 => {
+                if is_key_pressed(KeyCode::Enter) {
+                    let bricks = Bricks::spawn();
+                    let player = Player::spawn();
+                    self.state = 1;
+                    self.lives = 5;
+                    self.player = player;
+                    self.bricks = bricks;
+                    self.score = 0
+                }
+            }
             3 => println!("Pause"),
             _ => println!("Nothing"),
         }
     }
 
     pub fn draw(&self) {
-        clear_background(BLACK);
-        set_camera(&Camera2D::from_display_rect(Rect::new(
-            0.0,
-            VIRTUAL_HEIGHT,
-            VIRTUAL_WIDTH,
-            -VIRTUAL_HEIGHT,
-        )));
-        self.player.draw();
-        self.bricks.draw();
-        self.ball.draw();
-        set_default_camera();
-        self.draw_debug();
-        draw_text(&self.lives.to_string(), 10.0, 580.0, 20.0, WHITE);
+        match self.state {
+            0 => println!("Breakout Rust Edition"),
+            1 => {
+                clear_background(BLACK);
+                set_camera(&Camera2D::from_display_rect(Rect::new(
+                    0.0,
+                    VIRTUAL_HEIGHT,
+                    VIRTUAL_WIDTH,
+                    -VIRTUAL_HEIGHT,
+                )));
+                self.player.draw();
+                self.bricks.draw();
+                self.ball.draw();
+                draw_text(&format!("Lives: {}", self.lives), 10.0, 580.0, 20.0, WHITE);
+                set_default_camera();
+                self.draw_debug();
+            },
+            2 => {
+                set_camera(&Camera2D::from_display_rect(Rect::new(
+                    0.0,
+                    VIRTUAL_HEIGHT,
+                    VIRTUAL_WIDTH,
+                    -VIRTUAL_HEIGHT,
+                )));
+                draw_text("GAME OVER", VIRTUAL_WIDTH / 2.0 - 120.0, VIRTUAL_HEIGHT / 2.0, 60.0, RED);
+                draw_text("Press Enter to Restart", VIRTUAL_WIDTH / 2.0 - 144.0, VIRTUAL_HEIGHT / 2.0 + 30.0, 30.0, RED);
+            },
+            3 => println!("pause"),
+            _ => println!("nothing")
+        }
+        
     }
 
     fn lives(&mut self) {
