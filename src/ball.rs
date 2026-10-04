@@ -45,10 +45,8 @@ impl Ball {
             self.velocity_y = 5.0;
         }
 
-        hits.paddle = self.ball_to_player(player); //check collision with paddle
+        hits.paddle = self.ball_to_player(player);
 
-        // only count a wall hit when the velocity actually flips, so the sound
-        // doesn't repeat while the ball is still overlapping the edge
         if self.entity.x < 0.0 && self.velocity_x < 0.0 {
             self.velocity_x = self.velocity_x.abs();
             hits.wall = true;
@@ -69,8 +67,6 @@ impl Ball {
     }
 
     fn ball_to_player(&mut self, player: &Entity) -> bool {
-        // only bounce while moving down, otherwise the ball can flip back and
-        // forth (and replay the sound) while it overlaps the paddle
         if self.velocity_y > 0.0 && self.entity.intersects(player) {
             let ball_center = self.entity.x + self.entity.w / 2.0;
             let player_center = player.x + player.w / 2.0;

@@ -37,6 +37,10 @@ impl GameState {
             self.show_debug = !self.show_debug;
         }
 
+        if is_key_pressed(KeyCode::M) {
+            self.audio.toggle_mute();
+        }
+
         match self.state {
             1 => {
                 self.player.update();
@@ -179,6 +183,8 @@ impl GameState {
                 self.ball.draw_paused();
                 let title_dims = measure_text("PAUSED", None, 60, 1.0);
                 let prompt_dims = measure_text("Press Esc to Continue", None, 30, 1.0);
+                let mute_prompt = if self.audio.muted { "Press M to Unmute Music" } else { "Press M to Mute Music" };
+                let mute_dims = measure_text(mute_prompt, None, 30, 1.0);
                 draw_text(
                     "PAUSED",
                     VIRTUAL_WIDTH / 2.0 - title_dims.width / 2.0,
@@ -193,6 +199,13 @@ impl GameState {
                     30.0,
                     GRAY,
                 );
+                draw_text(
+                    mute_prompt,
+                    VIRTUAL_WIDTH / 2.0 - mute_dims.width / 2.0,
+                    VIRTUAL_HEIGHT / 2.0 + 60.0,
+                    30.0,
+                    GRAY,
+                );
             }
             _ => (),
         }
@@ -200,6 +213,7 @@ impl GameState {
 
     fn lives(&mut self) {
         if self.ball.missed_paddle() {
+            self.audio.ball_falls_off();
             self.lives -= 1;
         }
 
