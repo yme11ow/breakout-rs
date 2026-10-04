@@ -37,7 +37,7 @@ impl GameState {
             0 => println!("Breakout: Rust Edition"),
             1 => {
                 self.player.update();
-                self.bricks.update(&mut self.ball);
+                self.score += self.bricks.update(&mut self.ball);
                 self.ball.update(&self.player.entity);
                 self.lives();
             },
@@ -71,7 +71,8 @@ impl GameState {
                 self.player.draw();
                 self.bricks.draw();
                 self.ball.draw();
-                draw_text(&format!("Lives: {}", self.lives), 10.0, 580.0, 20.0, WHITE);
+                draw_text(&format!("Score: {}", self.score), 10.0, 575.0, 20.0, WHITE);
+                draw_text(&format!("Lives: {}", self.lives), 10.0, 590.0, 20.0, WHITE);
                 set_default_camera();
                 self.draw_debug();
             },
