@@ -20,7 +20,7 @@ impl GameState {
         GameState {
             lives: 5,
             score: 0,
-            state: 1,
+            state: 0,
             player: player,
             bricks: bricks,
             ball: ball,
@@ -34,7 +34,6 @@ impl GameState {
         }
 
         match self.state {
-            0 => println!("Breakout: Rust Edition"),
             1 => {
                 self.player.update();
                 self.score += self.bricks.update(&mut self.ball);
@@ -49,7 +48,7 @@ impl GameState {
                     self.state = 4;
                 }
             }
-            2 | 3 => self.restart_game(),
+            0 | 2 | 3 => self.start_game(),
             4 => {
                 if is_key_pressed(Escape) {
                     self.state = 1;
@@ -61,7 +60,38 @@ impl GameState {
 
     pub fn draw(&mut self) {
         match self.state {
-            0 => println!("Breakout Rust Edition"),
+            0 => {
+                set_camera(&Camera2D::from_display_rect(Rect::new(
+                    0.0,
+                    VIRTUAL_HEIGHT,
+                    VIRTUAL_WIDTH,
+                    -VIRTUAL_HEIGHT,
+                )));
+                let title_dims = measure_text("BREAKOUT", None, 60, 1.0);
+                let subtitle_dims = measure_text("Rust Edition", None, 30, 1.0);
+                let prompt_dims = measure_text("Press Enter to Start", None, 30, 1.0);
+                draw_text(
+                    "BREAKOUT",
+                    VIRTUAL_WIDTH / 2.0 - title_dims.width / 2.0,
+                    VIRTUAL_HEIGHT / 4.0,
+                    60.0,
+                    ORANGE,
+                );
+                draw_text(
+                    "Rust Edition",
+                    VIRTUAL_WIDTH / 2.0 - subtitle_dims.width / 2.0,
+                    VIRTUAL_HEIGHT / 4.0 + 30.0,
+                    30.0,
+                    ORANGE,
+                );
+                draw_text(
+                    "Press Enter to Start",
+                    VIRTUAL_WIDTH / 2.0 - prompt_dims.width / 2.0,
+                    VIRTUAL_HEIGHT / 2.0 + 60.0,
+                    30.0,
+                    ORANGE,
+                );
+            }
             1 => {
                 clear_background(BLACK);
                 set_camera(&Camera2D::from_display_rect(Rect::new(
@@ -73,7 +103,7 @@ impl GameState {
                 self.player.draw();
                 self.bricks.draw();
                 self.ball.draw();
-                draw_text(&format!("Score: {}", self.score), 10.0, 575.0, 20.0, WHITE);
+                draw_text(&format!("Score: {}", self.score), self.player.entity.x, self.player.entity.y + 22.0, 20.0, WHITE); // OG x: 10, y: 575
                 draw_text(&format!("Lives: {}", self.lives), 10.0, 590.0, 20.0, WHITE);
                 set_default_camera();
                 self.draw_debug();
@@ -173,7 +203,7 @@ impl GameState {
         }
     }
 
-    fn restart_game(&mut self) {
+    fn start_game(&mut self) {
         if is_key_pressed(KeyCode::Enter) {
             let bricks = Bricks::spawn();
             let player = Player::spawn();

@@ -31,9 +31,9 @@ impl Ball {
             self.entity.y = 300.0;
 
             if random_bool {
-                self.velocity_x = -5.0;
+                self.velocity_x = -2.0;
             } else {
-                self.velocity_x = 5.0;
+                self.velocity_x = 2.0;
             }
             self.velocity_y = 5.0;
         }
