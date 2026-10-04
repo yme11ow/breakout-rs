@@ -1,6 +1,6 @@
 use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, entity::Entity};
-use macroquad::color::WHITE;
 use ::rand;
+use macroquad::color::WHITE;
 
 pub struct Ball {
     pub entity: Entity,
@@ -73,7 +73,6 @@ impl Ball {
         } else {
             false
         }
-
     }
 
     pub fn draw(&self) {

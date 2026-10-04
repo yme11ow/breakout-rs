@@ -4,7 +4,7 @@ use macroquad::prelude::*;
 #[derive(Clone, Copy)]
 struct Brick {
     pub entity: Entity,
-    pub points: i32
+    pub points: i32,
 }
 
 impl Brick {
@@ -36,7 +36,9 @@ impl Bricks {
 
         const COLS: usize = 32;
         const ROWS: usize = 10;
-        const ROW_COLORS: [Color; ROWS] = [RED, ORANGE, YELLOW, GOLD, GREEN, BLUE, PURPLE, MAGENTA, PINK, GRAY,];
+        const ROW_COLORS: [Color; ROWS] = [
+            RED, ORANGE, YELLOW, GOLD, GREEN, BLUE, PURPLE, MAGENTA, PINK, GRAY,
+        ];
         const ROW_POINTS: [i32; ROWS] = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10];
 
         let mut list: Vec<Brick> = vec![brick; ROWS * COLS];
