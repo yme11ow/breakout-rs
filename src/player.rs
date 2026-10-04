@@ -38,7 +38,13 @@ impl Player {
         }
     }
 
-    pub fn draw(&self) {
+    pub fn draw(&mut self) {
+        self.entity.color = WHITE;
+        self.entity.draw();
+    }
+
+    pub fn draw_paused(&mut self) {
+        self.entity.color = GRAY;
         self.entity.draw();
     }
 }

@@ -77,4 +77,12 @@ impl Bricks {
             brick.draw();
         }
     }
+
+    pub fn draw_paused(&self) {
+        for brick in self.list.iter() {
+            let mut entity = brick.entity; // Entity is Copy, so this is a copy
+            entity.color = GRAY;
+            entity.draw();
+        }
+    }
 }

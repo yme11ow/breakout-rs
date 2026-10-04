@@ -1,5 +1,5 @@
 use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, ball::Ball, bricks::Bricks, player::Player};
-use macroquad::prelude::*;
+use macroquad::{input::KeyCode::Escape, prelude::*};
 
 pub struct GameState {
     pub lives: i32,
@@ -20,7 +20,7 @@ impl GameState {
         GameState {
             lives: 5,
             score: 0,
-            state: 3,
+            state: 1,
             player: player,
             bricks: bricks,
             ball: ball,
@@ -44,14 +44,22 @@ impl GameState {
                 if self.score == 17600 {
                     self.state = 3;
                 }
+
+                if is_key_pressed(Escape) {
+                    self.state = 4;
+                }
             }
             2 | 3 => self.restart_game(),
-            4 => println!("pause"),
+            4 => {
+                if is_key_pressed(Escape) {
+                    self.state = 1;
+                }
+            }
             _ => (),
         }
     }
 
-    pub fn draw(&self) {
+    pub fn draw(&mut self) {
         match self.state {
             0 => println!("Breakout Rust Edition"),
             1 => {
@@ -118,7 +126,27 @@ impl GameState {
                     GREEN,
                 );
             }
-            4 => println!("pause"),
+            4 => {
+                self.player.draw_paused();
+                self.bricks.draw_paused();
+                self.ball.draw_paused();
+                let title_dims = measure_text("PAUSED", None, 60, 1.0);
+                let prompt_dims = measure_text("Press Esc to Continue", None, 30, 1.0);
+                draw_text(
+                    "PAUSED",
+                    VIRTUAL_WIDTH / 2.0 - title_dims.width / 2.0,
+                    VIRTUAL_HEIGHT / 2.0,
+                    60.0,
+                    GRAY,
+                );
+                draw_text(
+                    "Press Esc to Continue",
+                    VIRTUAL_WIDTH / 2.0 - prompt_dims.width / 2.0,
+                    VIRTUAL_HEIGHT / 2.0 + 30.0,
+                    30.0,
+                    GRAY,
+                );
+            }
             _ => (),
         }
     }

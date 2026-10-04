@@ -1,6 +1,6 @@
 use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, entity::Entity};
 use ::rand;
-use macroquad::color::WHITE;
+use macroquad::color::{GRAY, WHITE};
 
 pub struct Ball {
     pub entity: Entity,
@@ -75,7 +75,13 @@ impl Ball {
         }
     }
 
-    pub fn draw(&self) {
+    pub fn draw(&mut self) {
+        self.entity.color = WHITE;
+        self.entity.draw_circle(7.5);
+    }
+
+    pub fn draw_paused(&mut self) {
+        self.entity.color = GRAY;
         self.entity.draw_circle(7.5);
     }
 }
