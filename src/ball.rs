@@ -1,6 +1,8 @@
 use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, entity::Entity};
-use ::rand;
-use macroquad::color::{GRAY, WHITE};
+use macroquad::{
+    color::{GRAY, WHITE},
+    rand,
+};
 
 #[derive(Default)]
 pub struct BallHits {
@@ -31,7 +33,7 @@ impl Ball {
 
     pub fn update(&mut self, player: &Entity) -> BallHits {
         let mut hits = BallHits::default();
-        let random_bool: bool = rand::random();
+        let random_bool: bool = rand::gen_range(0, 2) == 0;
 
         if self.missed_paddle() {
             self.entity.x = 400.0;

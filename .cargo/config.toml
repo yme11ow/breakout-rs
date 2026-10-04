@@ -1,0 +1,5 @@
+# macroquad's audio backend (quad-snd) imports functions that mq_js_bundle.js
+# provides at runtime. Newer Rust versions no longer allow undefined symbols
+# when linking wasm by default, so allow them explicitly.
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=--allow-undefined"]

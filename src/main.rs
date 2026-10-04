@@ -32,6 +32,7 @@ async fn main() {
 }
 
 async fn window() {
+    rand::srand(miniquad::date::now() as u64);
     let audio = Audio::load().await;
     let mut game_state = GameState::init(audio);
 
