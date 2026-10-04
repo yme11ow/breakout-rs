@@ -1,4 +1,4 @@
-use macroquad::audio::{PlaySoundParams, Sound, load_sound, play_sound, play_sound_once, set_sound_volume, stop_sound};
+use macroquad::audio::{PlaySoundParams, Sound, load_sound_from_bytes, play_sound, play_sound_once, set_sound_volume, stop_sound};
 
 pub struct Audio {
     ball_brick: Sound,
@@ -17,16 +17,16 @@ pub struct Audio {
 impl Audio {
     pub async fn load() -> Self {
         Audio {
-            ball_brick: load("audio/ball_brick.wav").await,
-            ball_paddle: load("audio/ball_paddle.wav").await,
-            ball_wall: load("audio/ball_wall.wav").await,
-            ball_falls_off: load("audio/ball_falls_off.wav").await,
-            click_button: load("audio/click-button2.wav").await,
-            start_game: load("audio/start_game.wav").await,
-            title_music: load("audio/title_music.wav").await,
-            gameplay_music: load("audio/gameplay_music.wav").await,
-            game_over: load("audio/game_over.wav").await,
-            you_win: load("audio/you_win.wav").await,
+            ball_brick: load(include_bytes!("../audio/ball_brick.wav")).await,
+            ball_paddle: load(include_bytes!("../audio/ball_paddle.wav")).await,
+            ball_wall: load(include_bytes!("../audio/ball_wall.wav")).await,
+            ball_falls_off: load(include_bytes!("../audio/ball_falls_off.wav")).await,
+            click_button: load(include_bytes!("../audio/click-button2.wav")).await,
+            start_game: load(include_bytes!("../audio/start_game.wav")).await,
+            title_music: load(include_bytes!("../audio/title_music.ogg")).await,
+            gameplay_music: load(include_bytes!("../audio/gameplay_music.ogg")).await,
+            game_over: load(include_bytes!("../audio/game_over.ogg")).await,
+            you_win: load(include_bytes!("../audio/you_win.ogg")).await,
             muted: false,
         }
     }
@@ -100,8 +100,8 @@ impl Audio {
     }
 }
 
-async fn load(path: &str) -> Sound {
-    load_sound(path)
+async fn load(bytes: &[u8]) -> Sound {
+    load_sound_from_bytes(bytes)
         .await
-        .unwrap_or_else(|e| panic!("failed to load {path}: {e}"))
+        .unwrap_or_else(|e| panic!("failed to load sound: {e}"))
 }

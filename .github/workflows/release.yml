@@ -15,7 +15,7 @@ jobs:
         platform:
           - os-name: Linux-x86_64
             runs-on: ubuntu-24.04
-            target: x86_64-unknown-linux-musl
+            target: x86_64-unknown-linux-gnu
 
           - os-name: macOS-x86_64
             runs-on: macos-latest
@@ -41,7 +41,7 @@ jobs:
       - name: Package artifacts
         uses: houseabsolute/actions-rust-release@v1.0.1
         with:
-          executable-name: yaftc
+          executable-name: breakout-rs
           target: ${{ matrix.platform.target }}
           changes-file: ""
 
@@ -57,5 +57,5 @@ jobs:
       - name: Publish release
         uses: houseabsolute/actions-rust-release/publish@v1.0.1
         with:
-          executable-name: yaftc
+          executable-name: breakout-rs
           changes-file: ""
