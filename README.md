@@ -5,9 +5,11 @@
 A classic Breakout clone written in Rust with [macroquad](https://github.com/not-fl3/macroquad).
 I made it to learn Rust, just for fun.
 
+### [▶️ Play in your browser](https://yme11ow.github.io/breakout-rs/)
+
 [![Release](https://img.shields.io/github/v/release/yme11ow/breakout-rs?style=flat-square)](https://github.com/yme11ow/breakout-rs/releases/latest)
 ![Rust](https://img.shields.io/badge/Rust-2024_edition-orange?style=flat-square&logo=rust)
-![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-blue?style=flat-square)
+![Platforms](https://img.shields.io/badge/platforms-Web%20%7C%20Windows%20%7C%20macOS%20%7C%20Linux-blue?style=flat-square)
 
 </div>
 
@@ -46,7 +48,9 @@ A perfect run scores **17,600** points.
 
 ## 📦 Download
 
-Grab the latest build for your platform from the [**Releases**](https://github.com/yme11ow/breakout-rs/releases/latest) page:
+No install needed: you can [**play it in your browser**](https://yme11ow.github.io/breakout-rs/). Click the game or press any key if the music doesn't start right away.
+
+To play offline, grab the latest build for your platform from the [**Releases**](https://github.com/yme11ow/breakout-rs/releases/latest) page:
 
 - **Windows:** `x86_64-pc-windows-msvc`
 - **macOS:** `x86_64-apple-darwin` (Intel; runs on Apple Silicon through Rosetta)
