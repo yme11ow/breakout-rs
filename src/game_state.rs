@@ -1,4 +1,4 @@
-use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, ball::Ball, bricks::Bricks, player::Player};
+use crate::{VIRTUAL_HEIGHT, VIRTUAL_WIDTH, audio::Audio, ball::Ball, bricks::Bricks, player::Player};
 use macroquad::{input::KeyCode::Escape, prelude::*};
 
 pub struct GameState {
@@ -9,10 +9,13 @@ pub struct GameState {
     pub bricks: Bricks,
     pub ball: Ball,
     pub show_debug: bool,
+    pub audio: Audio,
 }
 
 impl GameState {
-    pub fn init() -> Self {
+    pub fn init(audio: Audio) -> Self {
+        audio.play_title_music();
+
         let player = Player::spawn();
         let bricks = Bricks::spawn();
         let ball = Ball::spawn();
@@ -25,6 +28,7 @@ impl GameState {
             bricks: bricks,
             ball: ball,
             show_debug: false,
+            audio: audio,
         }
     }
 
@@ -36,12 +40,25 @@ impl GameState {
         match self.state {
             1 => {
                 self.player.update();
-                self.score += self.bricks.update(&mut self.ball);
-                self.ball.update(&self.player.entity);
+                let points = self.bricks.update(&mut self.ball);
+                if points > 0 {
+                    self.audio.ball_brick();
+                }
+                self.score += points;
+
+                let hits = self.ball.update(&self.player.entity);
+                if hits.paddle {
+                    self.audio.ball_paddle();
+                }
+                if hits.wall {
+                    self.audio.ball_wall();
+                }
+
                 self.lives();
 
                 if self.score == 17600 {
                     self.state = 3;
+                    self.audio.play_victory_music();
                 }
 
                 if is_key_pressed(Escape) {
@@ -188,6 +205,7 @@ impl GameState {
 
         if self.lives <= 0 {
             self.state = 2;
+            self.audio.play_game_over_music();
         }
     }
 
@@ -205,6 +223,13 @@ impl GameState {
 
     fn start_game(&mut self) {
         if is_key_pressed(KeyCode::Enter) {
+            if self.state == 0 {
+                self.audio.start_game();
+            } else {
+                self.audio.click_button();
+            }
+            self.audio.play_gameplay_music();
+
             let bricks = Bricks::spawn();
             let player = Player::spawn();
             self.state = 1;

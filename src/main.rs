@@ -1,8 +1,10 @@
+mod audio;
 mod ball;
 mod bricks;
 mod entity;
 mod game_state;
 mod player;
+use crate::audio::Audio;
 use crate::game_state::GameState;
 use macroquad::miniquad::conf::Platform;
 use macroquad::prelude::*;
@@ -28,7 +30,8 @@ async fn main() {
 }
 
 async fn window() {
-    let mut game_state = GameState::init();
+    let audio = Audio::load().await;
+    let mut game_state = GameState::init(audio);
 
     loop {
         // update
